@@ -41,7 +41,7 @@ const postFindTutor = async (req, res) => {
 const getAllFindTutors = async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT id, child_name, salary, subjects, days, note, created_at 
+      `SELECT id, child_name, salary, subjects, days, note, district, created_at 
        FROM find_tutors 
        ORDER BY created_at DESC`
     );
@@ -56,27 +56,28 @@ const getAllFindTutors = async (req, res) => {
 
 // 查詢自己發布的找家教資訊
 const getMyFindTutors = async (req, res) => {
-    const { id: userId, role } = req.user;
-  
-    if (role !== 'parent') {
-      return res.status(403).json({ message: '只有家長可以查詢自己的發布紀錄' });
-    }
-  
-    try {
-      const [rows] = await db.query(
-        `SELECT id, child_name, salary, subjects, days, note, created_at
-         FROM find_tutors
-         WHERE user_id = ?
-         ORDER BY created_at DESC`,
-        [userId]
-      );
-  
-      res.status(200).json(rows);
-    } catch (error) {
-      console.error('查詢家長發布紀錄錯誤:', error);
-      res.status(500).json({ message: '伺服器錯誤' });
-    }
+  const { id: userId, role } = req.user;
+
+  if (role !== 'parent') {
+    return res.status(403).json({ message: '只有家長可以查詢自己的發布紀錄' });
+  }
+
+  try {
+    const [rows] = await db.query(
+      `SELECT id, child_name, phone, district, address, salary, subjects, days, note, created_at
+       FROM find_tutors
+       WHERE user_id = ?
+       ORDER BY created_at DESC`,
+      [userId]
+    );
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('查詢家長發布紀錄錯誤:', error);
+    res.status(500).json({ message: '伺服器錯誤' });
+  }
 };
+
 
 
 const deleteFindTutor = async (req, res) => {

@@ -92,12 +92,12 @@ const deleteTutorPost = async (req, res) => {
   }
 };
 
-// ✅ 修改家教資訊
+// ✅ 修改家教資訊 - 支援字串或陣列格式的 subjects / available_days
 const updateTutorPost = async (req, res) => {
   const user = req.user;
   const tutorId = req.params.id;
 
-  const {
+  let {
     subjects,
     salary,
     salary_note,
@@ -108,8 +108,19 @@ const updateTutorPost = async (req, res) => {
   } = req.body;
 
   try {
-    // 先確認這筆資料屬於當前登入者
-    const [rows] = await db.query('SELECT * FROM tutors WHERE id = ? AND user_id = ?', [tutorId, user.id]);
+    // ✅ 如果是字串，轉成陣列
+    if (typeof subjects === 'string') {
+      subjects = subjects.split(',').map(s => s.trim());
+    }
+    if (typeof available_days === 'string') {
+      available_days = available_days.split(',').map(s => s.trim());
+    }
+
+    // ✅ 驗證身份
+    const [rows] = await db.query(
+      'SELECT * FROM tutors WHERE id = ? AND user_id = ?',
+      [tutorId, user.id]
+    );
 
     if (rows.length === 0) {
       return res.status(403).json({ message: '無權限修改此筆資料' });
@@ -145,6 +156,7 @@ const updateTutorPost = async (req, res) => {
     res.status(500).json({ message: '伺服器錯誤，修改失敗' });
   }
 };
+
 
 // 取得所有做家教資訊（不需登入）
 const getAllTutors = async (req, res) => {
