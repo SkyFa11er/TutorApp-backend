@@ -131,7 +131,7 @@ const updateTutorPost = async (req, res) => {
         subjects = ?, 
         salary = ?, 
         salary_note = ?, 
-        intro = ?, 
+        intro = ?,  
         available_days = ?, 
         start_time = ?, 
         end_time = ? 

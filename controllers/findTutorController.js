@@ -40,11 +40,11 @@ const postFindTutor = async (req, res) => {
 // 顯示所有家長發布的找家教資訊（廣場）
 const getAllFindTutors = async (req, res) => {
   try {
-    const [rows] = await db.query(
-      `SELECT id, child_name, salary, subjects, days, note, district, created_at 
-       FROM find_tutors 
-       ORDER BY created_at DESC`
-    );
+    const [rows] = await db.query(`
+      SELECT id, user_id, child_name, salary, subjects, days, note, district, created_at
+      FROM find_tutors
+      ORDER BY created_at DESC
+    `);    
 
     res.status(200).json(rows);
   } catch (error) {
