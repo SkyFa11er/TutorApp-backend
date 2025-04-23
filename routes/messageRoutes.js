@@ -4,7 +4,8 @@ const auth = require('../middlewares/authMiddleware');
 const {
   sendMessage,
   getChatMessages,
-  getConversationList
+  getConversationList,
+  deleteConversation
 } = require('../controllers/messageController');
 
 // ✅ 傳送訊息（語意清楚：/send）
@@ -15,5 +16,7 @@ router.get('/chat/:userId', auth, getChatMessages);
 
 // ✅ 查詢聊天室列表（每位對象的最後一筆訊息）
 router.get('/conversations', auth, getConversationList);
+// ✅ 刪除聊天紀錄
+router.delete('/conversation/:userId', auth, deleteConversation);
 
 module.exports = router;

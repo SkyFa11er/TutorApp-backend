@@ -77,8 +77,29 @@ const getConversationList = async (req, res) => {
   }
 };
 
+// 刪除與某位使用者的所有對話
+const deleteConversation = async (req, res) => {
+  const currentUserId = req.user.id;
+  const otherUserId = parseInt(req.params.userId);
+
+  try {
+    await db.query(`
+      DELETE FROM messages
+      WHERE (sender_id = ? AND receiver_id = ?)
+         OR (sender_id = ? AND receiver_id = ?)
+    `, [currentUserId, otherUserId, otherUserId, currentUserId]);
+
+    res.json({ message: '✅ 對話紀錄已刪除' });
+  } catch (error) {
+    console.error('刪除訊息錯誤：', error);
+    res.status(500).json({ message: '伺服器錯誤' });
+  }
+};
+
+
 module.exports = {
   sendMessage,
   getChatMessages,
   getConversationList,
+  deleteConversation,
 };
