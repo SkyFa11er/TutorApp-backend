@@ -43,6 +43,7 @@ const getAllFindTutors = async (req, res) => {
     const [rows] = await db.query(`
       SELECT id, user_id, child_name, salary, subjects, days, note, district, created_at
       FROM find_tutors
+      WHERE is_matched = false
       ORDER BY created_at DESC
     `);    
 

@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const http = require('http');
 const db = require('./models/db');
 const expressWs = require('express-ws');
+const matchRoutes = require('./routes/matchRoutes');
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/tutors', require('./routes/tutorRoutes'));
 app.use('/api/find-tutors', require('./routes/findTutorRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
+app.use('/api/matches', matchRoutes);
 
 // ✅ 測試首頁
 app.get('/', (req, res) => {

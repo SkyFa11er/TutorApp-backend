@@ -161,7 +161,7 @@ const updateTutorPost = async (req, res) => {
 // 取得所有做家教資訊（不需登入）
 const getAllTutors = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM tutors ORDER BY created_at DESC');
+    const [rows] = await db.query('SELECT * FROM tutors WHERE is_matched = false ORDER BY created_at DESC');
     res.json(rows);
   } catch (error) {
     console.error('取得所有家教資訊錯誤：', error);
